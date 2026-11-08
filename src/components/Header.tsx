@@ -37,6 +37,15 @@ export function Header() {
     return () => document.body.classList.remove("menu-open");
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <header className={`site-header ${solid ? "is-solid" : ""}`}>
       <div className="container header-inner">
@@ -52,7 +61,7 @@ export function Header() {
           })}
         </nav>
         <div className="header-tools">
-          <a className="header-phone" href={`tel:${site.phoneTel}`}>
+          <a className="header-phone" href={`tel:${site.phoneTel}`} aria-label={`${site.phoneDisplay}, חיוג`}>
             <PhoneIcon />
             <span>{site.phoneDisplay}</span>
           </a>

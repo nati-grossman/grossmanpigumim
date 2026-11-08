@@ -481,7 +481,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .card-cat {
-  color: var(--steel);
+  color: #3d4450;
   font-size: 13px;
   font-weight: 700;
 }
@@ -886,11 +886,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .field.has-error select,
 .field.has-error textarea { border-color: var(--danger); }
 
+.field-hint,
 .field-error {
-  color: var(--danger);
   font-size: 14px;
   margin-top: 6px;
 }
+
+.field-hint { color: #3d4450; margin-bottom: 6px; }
+
+.field-error { color: var(--danger); }
+
+.req { color: var(--danger); }
 
 .form-note {
   margin-top: 12px;
@@ -1035,4 +1041,164 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .media-img,
   .nav-panel,
   .menu-toggle span { animation: none; transition: none; }
+}
+
+.a11y-dock {
+  position: fixed;
+  z-index: 60;
+  right: 20px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.a11y-toggle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--ink);
+  color: var(--gold);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.a11y-toggle .icon { width: 26px; height: 26px; }
+
+.a11y-panel {
+  width: min(300px, calc(100vw - 32px));
+  max-height: calc(100dvh - var(--header) - 110px);
+  overflow: auto;
+  background: var(--white);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.a11y-title {
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.a11y-panel button,
+.a11y-panel a {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--text);
+  text-align: start;
+  padding: 8px 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.a11y-panel button[aria-pressed="true"] {
+  background: var(--gold);
+  color: var(--on-gold);
+  border-color: var(--gold);
+}
+
+.a11y-panel button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.a11y-size {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.a11y-size span {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.a11y-reset { background: var(--white); }
+
+html.a11y-text-1 { zoom: 1.12; }
+html.a11y-text-2 { zoom: 1.25; }
+
+html.a11y-contrast {
+  --paper: #ffffff;
+  --text: #000000;
+  --muted: #1a1a1a;
+  --ink: #000000;
+  --on-dark: #ffffff;
+  --line: #000000;
+  --white: #ffffff;
+}
+
+html.a11y-contrast body,
+html.a11y-contrast .card,
+html.a11y-contrast .quote-form,
+html.a11y-contrast .side-note,
+html.a11y-contrast .about-links a {
+  background: #ffffff;
+  color: #000000;
+}
+
+html.a11y-contrast .site-header,
+html.a11y-contrast .site-header.is-solid,
+html.a11y-contrast .page-hero,
+html.a11y-contrast .hero,
+html.a11y-contrast .site-footer,
+html.a11y-contrast .cta,
+html.a11y-contrast .nav-panel,
+html.a11y-contrast .plate {
+  background: #000000;
+  color: #ffffff;
+}
+
+html.a11y-contrast .card,
+html.a11y-contrast .field input,
+html.a11y-contrast .field select,
+html.a11y-contrast .field textarea,
+html.a11y-contrast .btn-line {
+  border-color: #000000;
+}
+
+html.a11y-links a { text-decoration: underline; text-underline-offset: 3px; }
+
+html.a11y-readable body {
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  word-spacing: 0.06em;
+}
+
+html.a11y-readable h1,
+html.a11y-readable h2,
+html.a11y-readable h3 {
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+html.a11y-motion *,
+html.a11y-motion *::before,
+html.a11y-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-gray body { filter: grayscale(1); }
+
+html.a11y-cursor,
+html.a11y-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M4 2 L4 26 L12 20 L16 28 L20 26 L16 18 L26 18 Z' fill='%23101010' stroke='%23F5C400' stroke-width='2'/%3E%3C/svg%3E") 4 2, auto;
+}
+
+@media (max-width: 767px) {
+  .a11y-dock { bottom: calc(68px + env(safe-area-inset-bottom)); }
+  .a11y-panel { max-height: calc(100dvh - var(--header) - 160px); }
 }

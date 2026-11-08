@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState, type ReactNode } from "react";
+import { cloneElement, FormEvent, isValidElement, useState, type ReactElement, type ReactNode } from "react";
 import { site, waLink } from "@/lib/site";
 
 type Choice = { value: string; label: string };
@@ -11,7 +11,7 @@ const intents: Choice[] = [
   { value: "unsure", label: "עדיין לא בטוח" },
 ];
 
-type Errors = Partial<Record<"name" | "phone" | "equipment" | "intent", string>>;
+type Errors = Partial<Record<"name" | "phone" | "email" | "equipment" | "intent", string>>;
 
 export function ContactForm({
   choices,
@@ -23,6 +23,7 @@ export function ContactForm({
   const preset = choices.some((choice) => choice.value === initialProduct) ? initialProduct : "";
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [equipment, setEquipment] = useState(preset);
   const [intent, setIntent] = useState("");
   const [message, setMessage] = useState("");
@@ -36,6 +37,9 @@ export function ContactForm({
     if (name.trim().length < 2) nextErrors.name = "נא להזין שם מלא.";
     const digits = phone.replace(/[^\d]/g, "");
     if (!/^0\d{8,9}$/.test(digits)) nextErrors.phone = "נא להזין מספר טלפון תקין.";
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      nextErrors.email = "נא להזין כתובת מייל תקינה, או להשאיר את השדה ריק.";
+    }
     if (!equipment) nextErrors.equipment = "נא לבחור סוג ציוד.";
     if (!intent) nextErrors.intent = "נא לבחור סוג פנייה.";
     setErrors(nextErrors);
@@ -52,6 +56,7 @@ export function ContactForm({
       "שלום, אשמח לקבל הצעת מחיר.",
       `שם: ${name.trim()}`,
       `טלפון: ${digits}`,
+      ...(email.trim() ? [`מייל: ${email.trim()}`] : []),
       `סוג פנייה: ${intentLabel}`,
       `ציוד: ${equipmentLabel}`,
     ];
@@ -91,7 +96,7 @@ export function ContactForm({
           <input tabIndex={-1} autoComplete="off" value={company} onChange={(event) => setCompany(event.target.value)} />
         </label>
       </div>
-      <Field id="full-name" label="שם מלא" error={errors.name}>
+      <Field id="full-name" label="שם מלא" error={errors.name} required>
         <input
           id="full-name"
           name="name"
@@ -101,7 +106,7 @@ export function ContactForm({
           onChange={(event) => setName(event.target.value)}
         />
       </Field>
-      <Field id="phone" label="טלפון" error={errors.phone}>
+      <Field id="phone" label="טלפון לחזרה" error={errors.phone} required>
         <input
           id="phone"
           name="phone"
@@ -109,11 +114,21 @@ export function ContactForm({
           inputMode="tel"
           autoComplete="tel"
           value={phone}
-          aria-invalid={Boolean(errors.phone)}
           onChange={(event) => setPhone(event.target.value)}
         />
       </Field>
-      <Field id="equipment" label="סוג הציוד" error={errors.equipment}>
+      <Field id="email" label="מייל לחזרה" hint="לא חובה. נשתמש בו רק אם לא נצליח לחזור בטלפון." error={errors.email}>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          inputMode="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+      </Field>
+      <Field id="equipment" label="סוג הציוד" error={errors.equipment} required>
         <select
           id="equipment"
           name="equipment"
@@ -129,7 +144,7 @@ export function ContactForm({
           ))}
         </select>
       </Field>
-      <Field id="intent" label="סוג פנייה" error={errors.intent}>
+      <Field id="intent" label="סוג פנייה" error={errors.intent} required>
         <select
           id="intent"
           name="intent"
@@ -145,7 +160,7 @@ export function ContactForm({
           ))}
         </select>
       </Field>
-      <Field id="message" label="הודעה">
+      <Field id="message" label="מלל חופשי">
         <textarea
           id="message"
           name="message"
@@ -167,19 +182,47 @@ function Field({
   id,
   label,
   error,
+  hint,
+  required = false,
   children,
 }: {
   id: string;
   label: string;
   error?: string;
+  hint?: string;
+  required?: boolean;
   children: ReactNode;
 }) {
+  const hintId = hint ? `${id}-hint` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
+  const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
+  const control = isValidElement(children)
+    ? cloneElement(children as ReactElement<Record<string, unknown>>, {
+        "aria-describedby": describedBy,
+        "aria-invalid": Boolean(error) || undefined,
+        "aria-required": required || undefined,
+      })
+    : children;
+
   return (
     <div className={`field ${error ? "has-error" : ""}`}>
-      <label htmlFor={id}>{label}</label>
-      {children}
+      <label htmlFor={id}>
+        {label}
+        {required ? (
+          <span className="req" aria-hidden="true">
+            {" "}
+            *
+          </span>
+        ) : null}
+      </label>
+      {hint ? (
+        <p id={hintId} className="field-hint">
+          {hint}
+        </p>
+      ) : null}
+      {control}
       {error ? (
-        <p className="field-error" role="alert">
+        <p id={errorId} className="field-error" role="alert">
           {error}
         </p>
       ) : null}

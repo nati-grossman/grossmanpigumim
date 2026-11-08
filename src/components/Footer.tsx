@@ -7,6 +7,7 @@ const links = [
   { href: "/products", label: "הציוד שלנו" },
   { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },
+  { href: "/accessibility", label: "הצהרת נגישות" },
 ];
 
 export function Footer() {

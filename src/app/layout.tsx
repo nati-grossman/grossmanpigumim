@@ -3,6 +3,7 @@ import { Heebo } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ContactDock } from "@/components/ContactDock";
+import { AccessibilityMenu } from "@/components/AccessibilityMenu";
 import { businessJsonLd, site, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main">{children}</main>
         <Footer />
         <ContactDock />
+        <AccessibilityMenu />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }} />
       </body>
     </html>
