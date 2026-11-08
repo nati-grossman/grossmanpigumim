@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { PhoneIcon } from "./Icons";
@@ -18,6 +18,12 @@ export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  function closeMenu() {
+    setOpen(false);
+    toggleRef.current?.focus();
+  }
   const lightTop = /^\/products\/.+/.test(pathname);
   const solid = scrolled || open || lightTop;
 
@@ -40,7 +46,7 @@ export function Header() {
   useEffect(() => {
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -69,6 +75,7 @@ export function Header() {
             הצעת מחיר
           </Link>
           <button
+            ref={toggleRef}
             type="button"
             className={`menu-toggle ${open ? "is-open" : ""}`}
             aria-expanded={open}
@@ -83,14 +90,32 @@ export function Header() {
         </div>
       </div>
       <nav id="mobile-nav" className={`nav-panel ${open ? "is-open" : ""}`} aria-label="מובייל" aria-hidden={!open} inert={!open}>
-        {links.map((link) => (
-          <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
-            {link.label}
-          </Link>
-        ))}
+        <div className="nav-top">
+          <p className="nav-kicker">{site.tagline}</p>
+          <button type="button" className="nav-close" onClick={closeMenu}>
+            <span className="sr-only">סגירת תפריט</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+        <div className="nav-links">
+          {links.map((link) => {
+            const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+            return (
+              <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
         <Link className="btn btn-gold" href="/contact" onClick={() => setOpen(false)}>
           הצעת מחיר
         </Link>
+        <a className="nav-phone" href={`tel:${site.phoneTel}`}>
+          <PhoneIcon />
+          {site.phoneDisplay}
+        </a>
       </nav>
     </header>
   );
