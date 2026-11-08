@@ -213,6 +213,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .desktop-nav a[aria-current="page"] { color: var(--gold); }
 
 .header-tools {
+  position: relative;
   margin-inline-start: auto;
   display: flex;
   align-items: center;
@@ -265,47 +266,40 @@ button, input, select, textarea { font: inherit; color: inherit; }
   flex-direction: column;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  transform: translateY(-16px);
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .nav-panel.is-open {
   opacity: 1;
   visibility: visible;
   transform: none;
-}
-
-.nav-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 4px;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s;
 }
 
 .nav-kicker {
-  margin: 0;
+  margin: 0 0 8px;
   color: var(--gold);
   font-size: 13px;
   font-weight: 700;
 }
 
 .nav-close {
+  display: none;
   width: 44px;
   height: 44px;
-  margin-inline-end: -10px;
   border: 0;
   background: transparent;
   color: var(--on-dark);
-  display: grid;
   place-items: center;
   cursor: pointer;
-  flex: none;
 }
 
+.nav-close[hidden] { display: none !important; }
+
 .nav-close svg {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -1053,6 +1047,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .desktop-nav,
   .header-cta { display: none; }
   .menu-toggle { display: flex; }
+  .menu-toggle.is-open { visibility: hidden; }
+  .nav-close {
+    display: grid;
+    position: fixed;
+    z-index: 80;
+    top: 16px;
+    inset-inline-end: 16px;
+    width: 48px;
+    height: 48px;
+  }
   .grid { grid-template-columns: 1fr 1fr; }
   .trust { grid-template-columns: 1fr 1fr; }
   .trust article:nth-child(odd) { border-inline-start: 0; }

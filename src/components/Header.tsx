@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import { PhoneIcon } from "./Icons";
 import { site } from "@/lib/site";
@@ -16,6 +16,7 @@ const links = [
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -23,6 +24,11 @@ export function Header() {
   function closeMenu() {
     setOpen(false);
     toggleRef.current?.focus();
+  }
+
+  function follow(href: string) {
+    setOpen(false);
+    router.push(href);
   }
   const lightTop = /^\/products\/.+/.test(pathname);
   const solid = scrolled || open || lightTop;
@@ -87,29 +93,42 @@ export function Header() {
             <span />
             <span />
           </button>
-        </div>
-      </div>
-      <nav id="mobile-nav" className={`nav-panel ${open ? "is-open" : ""}`} aria-label="מובייל" aria-hidden={!open} inert={!open}>
-        <div className="nav-top">
-          <p className="nav-kicker">{site.tagline}</p>
-          <button type="button" className="nav-close" onClick={closeMenu}>
+          <button type="button" className="nav-close" onClick={closeMenu} hidden={!open}>
             <span className="sr-only">סגירת תפריט</span>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 6l12 12M18 6L6 18" />
             </svg>
           </button>
         </div>
+      </div>
+      <nav id="mobile-nav" className={`nav-panel ${open ? "is-open" : ""}`} aria-label="מובייל" aria-hidden={!open} inert={!open}>
+        <p className="nav-kicker">{site.tagline}</p>
         <div className="nav-links">
           {links.map((link) => {
             const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
             return (
-              <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                onClick={(event) => {
+                  event.preventDefault();
+                  follow(link.href);
+                }}
+              >
                 {link.label}
               </Link>
             );
           })}
         </div>
-        <Link className="btn btn-gold" href="/contact" onClick={() => setOpen(false)}>
+        <Link
+          className="btn btn-gold"
+          href="/contact"
+          onClick={(event) => {
+            event.preventDefault();
+            follow("/contact");
+          }}
+        >
           הצעת מחיר
         </Link>
         <a className="nav-phone" href={`tel:${site.phoneTel}`}>
