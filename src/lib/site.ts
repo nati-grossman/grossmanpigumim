@@ -10,7 +10,15 @@ export const site = {
     "השכרה ומכירה של מערכות פיגומים, מערכות תמיכה וציוד נלווה לקבלנים ולחברות בנייה.",
 };
 
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+function resolveSiteUrl() {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  if (explicit) return explicit;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
+export const siteUrl = resolveSiteUrl();
 
 export function waLink(message: string) {
   return `https://wa.me/${site.waPath}?text=${encodeURIComponent(message)}`;

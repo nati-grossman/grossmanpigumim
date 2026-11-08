@@ -25,7 +25,10 @@ export const metadata: Metadata = {
     locale: "he_IL",
     type: "website",
     siteName: site.name,
-    images: ["/images/site-hero.jpg"],
+    url: siteUrl,
+  },
+  twitter: {
+    card: "summary",
   },
 };
 
