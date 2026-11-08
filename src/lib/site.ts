@@ -6,8 +6,9 @@ export const site = {
   phoneTel: "0529546133",
   phoneE164: "+972529546133",
   waPath: "972529546133",
+  area: "בית שמש, ירושלים ומטה יהודה",
   description:
-    "השכרה ומכירה של מערכות פיגומים, מערכות תמיכה וציוד נלווה לקבלנים ולחברות בנייה.",
+    "השכרה ומכירה של מערכות פיגומים, מערכות תמיכה וציוד נלווה לקבלנים ולחברות בנייה. הרכבה ופירוק פיגומים בבית שמש, בירושלים ובמטה יהודה.",
 };
 
 function resolveSiteUrl() {
@@ -37,6 +38,10 @@ export const businessJsonLd = {
   slogan: site.slogan,
   description: site.description,
   telephone: site.phoneE164,
-  areaServed: "IL",
+  areaServed: [
+    { "@type": "City", name: "בית שמש" },
+    { "@type": "City", name: "ירושלים" },
+    { "@type": "AdministrativeArea", name: "מטה יהודה" },
+  ],
   url: siteUrl,
 };

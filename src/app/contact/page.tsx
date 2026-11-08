@@ -44,6 +44,7 @@ export default async function ContactPage({
                 WhatsApp
               </a>
             </div>
+            <p className="contact-area">{site.area}</p>
           </div>
           <ContactForm choices={equipmentChoices} initialProduct={product?.slug ?? ""} />
         </div>

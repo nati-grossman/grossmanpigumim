@@ -61,7 +61,7 @@ export function Header() {
   return (
     <header className={`site-header ${solid ? "is-solid" : ""}`}>
       <div className="container header-inner">
-        <Logo />
+        <Logo priority />
         <nav className="desktop-nav" aria-label="ראשי">
           {links.map((link) => {
             const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
