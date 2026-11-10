@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
+import { FaqList } from "@/components/FaqList";
 import { equipmentChoices, getProduct } from "@/lib/products";
-import { site, waGeneralMessage, waLink } from "@/lib/site";
+import { generalFaqs, site, waGeneralMessage, waLink } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "הצעת מחיר להשכרה ולרכישה",
@@ -44,9 +45,16 @@ export default async function ContactPage({
                 WhatsApp
               </a>
             </div>
+            <p className="contact-area">מענה {site.hours}</p>
             <p className="contact-area">{site.area}</p>
           </div>
           <ContactForm choices={equipmentChoices} initialProduct={product?.slug ?? ""} />
+        </div>
+      </section>
+      <section className="section faq-section">
+        <div className="container">
+          <h2 className="section-title">שאלות נפוצות</h2>
+          <FaqList items={generalFaqs} />
         </div>
       </section>
     </>

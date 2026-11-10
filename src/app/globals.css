@@ -819,6 +819,28 @@ button, input, select, textarea { font: inherit; color: inherit; }
   align-self: start;
 }
 
+.product-faq { margin-top: 48px; }
+.product-faq h2 { margin-bottom: 8px; }
+
+.faq-section { padding-top: 0; }
+
+.faq details {
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.faq details:last-child { border-bottom: 1px solid var(--line); }
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.faq details p {
+  margin: 10px 0 4px;
+  max-width: 68ch;
+}
+
 .product-repeat {
   margin-top: 36px;
   display: flex;

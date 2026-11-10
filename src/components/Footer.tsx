@@ -19,6 +19,7 @@ export function Footer() {
           <p className="footer-tag">{site.tagline}</p>
           <p>השכרה ומכירה של פיגומים, מערכות תמיכה וציוד נלווה.</p>
           <p>{site.area}</p>
+          <p>מענה {site.hours}</p>
         </div>
         <nav aria-label="תחתית">
           {links.map((link) => (

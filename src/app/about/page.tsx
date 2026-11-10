@@ -39,6 +39,7 @@ export default function AboutPage() {
             </p>
             <p>
               העבודה בבית שמש, בירושלים ובמטה יהודה. מעבר להשכרה ולמכירה של הציוד, מרכיבים ומפרקים פיגומים באתר.
+              שעות המענה {site.hours}. העסק ב{site.addressLocality}, וכתובת מדויקת תימסר כשצריך.
             </p>
             <h2>במה אנחנו עוסקים</h2>
             <div className="about-links">

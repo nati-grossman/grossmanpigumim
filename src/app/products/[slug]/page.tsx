@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FaqList } from "@/components/FaqList";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductMedia } from "@/components/ProductMedia";
 import { categoryById, getProduct, products, relatedProducts } from "@/lib/products";
@@ -39,7 +40,7 @@ export default async function ProductPage({
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.lead,
+    description: product.about[0],
     category: category.label,
     brand: { "@type": "Brand", name: site.name },
     image: product.image ? new URL(product.image, siteUrl).toString() : undefined,
@@ -73,7 +74,9 @@ export default async function ProductPage({
         <div className="product-body">
           <div className="prose">
             <h2>על הציוד</h2>
-            <p>{product.about}</p>
+            {product.about.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
             <h2>שימושים עיקריים</h2>
             <ul className="clean-list">
               {product.uses.map((use) => (
@@ -90,6 +93,11 @@ export default async function ProductPage({
             </ul>
           </aside>
         </div>
+
+        <section className="product-faq" aria-labelledby="product-faq-title">
+          <h2 id="product-faq-title">שאלות נפוצות</h2>
+          <FaqList items={product.faqs} />
+        </section>
 
         <div className="product-repeat">
           <p>להשכרה או לרכישה לפי הפרויקט.</p>
